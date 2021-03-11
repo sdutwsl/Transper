@@ -31,6 +31,8 @@ void CTransperDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CTransperDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDOK, &CTransperDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDCANCEL, &CTransperDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -86,3 +88,17 @@ HCURSOR CTransperDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CTransperDlg::OnBnClickedOk()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CDialogEx::OnOK();
+}
+
+
+void CTransperDlg::OnBnClickedCancel()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CDialogEx::OnCancel();
+}
