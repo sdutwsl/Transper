@@ -33,4 +33,14 @@ protected:
 public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();
+	// 标题
+	CString text;
+	// 类名
+	CString cname;
+	// 透明度
+	int alpha;
+	virtual BOOL Create(LPCTSTR lpszTemplateName, CWnd* pParentWnd = NULL);
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnTRBNThumbPosChangingSlider1(NMHDR* pNMHDR, LRESULT* pResult);
 };

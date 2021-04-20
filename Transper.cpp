@@ -16,6 +16,7 @@
 
 BEGIN_MESSAGE_MAP(CTransperApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER1, &CTransperApp::OnTRBNThumbPosChangingSlider1)
 END_MESSAGE_MAP()
 
 
@@ -102,3 +103,14 @@ BOOL CTransperApp::InitInstance()
 	return FALSE;
 }
 
+
+
+void CTransperApp::OnTRBNThumbPosChangingSlider1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	// 此功能要求 Windows Vista 或更高版本。
+	// _WIN32_WINNT 符号必须 >= 0x0600。
+	NMTRBTHUMBPOSCHANGING* pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING*>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	
+	*pResult = 0;
+}
