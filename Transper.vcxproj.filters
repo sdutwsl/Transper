@@ -59,8 +59,5 @@
     <Image Include="res\Transper.ico">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="cursor.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
   </ItemGroup>
 </Project>
