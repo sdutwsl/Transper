@@ -16,6 +16,7 @@
 // CTransperDlg 对话框
 
 TCHAR text_temp[1024], class_temp[1024];
+HWND h_p = 0;
 
 CTransperDlg::CTransperDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_TRANSPER_DIALOG, pParent)
@@ -41,6 +42,13 @@ BEGIN_MESSAGE_MAP(CTransperDlg, CDialogEx)
 	ON_BN_CLICKED(IDCANCEL, &CTransperDlg::OnBnClickedCancel)
 	ON_WM_TIMER()
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER1, &CTransperDlg::OnTRBNThumbPosChangingSlider1)
+	ON_STN_DBLCLK(IDC_IMG, &CTransperDlg::OnStnDblclickImg)
+	ON_STN_CLICKED(IDC_IMG, &CTransperDlg::OnStnClickedImg)
+	ON_WM_RBUTTONDOWN()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
+	ON_BN_CLICKED(IDC_BUTTON1, &CTransperDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -54,19 +62,6 @@ BOOL CTransperDlg::OnInitDialog()
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
-
-	::CreateThread(NULL, NULL, [](LPVOID param)->DWORD {
-		auto me = reinterpret_cast<CTransperDlg*>(param);
-		POINT pt;
-		while (true) {
-			Sleep(100);
-			GetCursorPos(&pt);
-			auto handle = ::WindowFromPoint(pt);
-			::GetWindowText(handle, text_temp, 1024);
-			::GetClassName(handle, class_temp, 1024);
-			::PostMessage(me->m_hWnd, WM_TIMER, 0, 0);
-		};
-		}, this, NULL, nullptr);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -132,9 +127,6 @@ BOOL CTransperDlg::Create(LPCTSTR lpszTemplateName, CWnd* pParentWnd)
 void CTransperDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	this->text = text_temp;
-	this->cname = class_temp;
-	this->UpdateData(false);
 	CDialogEx::OnTimer(nIDEvent);
 }
 
@@ -146,4 +138,73 @@ void CTransperDlg::OnTRBNThumbPosChangingSlider1(NMHDR* pNMHDR, LRESULT* pResult
 	NMTRBTHUMBPOSCHANGING* pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING*>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
+}
+
+
+void CTransperDlg::OnStnDblclickImg()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void CTransperDlg::OnStnClickedImg()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	MessageBox(_TEXT("aaa"));
+}
+
+
+void CTransperDlg::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	CDialogEx::OnRButtonDown(nFlags, point);
+}
+
+
+void CTransperDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	const HCURSOR custom_cursor = ::LoadCursorFromFile(TEXT("cursor.cur"));
+	::SetCapture(this->m_hWnd);
+	::SetCursor(custom_cursor);
+	CDialogEx::OnLButtonDown(nFlags, point);
+}
+
+
+void CTransperDlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	::ReleaseCapture();
+	CDialogEx::OnLButtonUp(nFlags, point);
+}
+
+
+void CTransperDlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值	
+	POINT pt;
+	GetCursorPos(&pt);
+	auto handle = ::GetAncestor(::WindowFromPoint(pt),GA_ROOTOWNER);
+	if (::GetAncestor(handle, GA_ROOTOWNER) == this->m_hWnd) {
+		return ;
+	}
+	h_p = handle;
+	::GetWindowText(handle, text_temp, 1024);
+	::GetClassName(handle, class_temp, 1024);
+
+	this->text = text_temp;
+	this->cname = class_temp;
+	this->UpdateData(false);
+	CDialogEx::OnMouseMove(nFlags, point);
+}
+
+
+void CTransperDlg::OnBnClickedButton1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	this->UpdateData();
+	::SetWindowLongA(h_p, GWL_EXSTYLE, ::GetWindowLong(h_p, GWL_EXSTYLE)| WS_EX_LAYERED);
+	::SetLayeredWindowAttributes(h_p, NULL, int((float)alpha * 2.55), LWA_ALPHA);
+	//::SetLayeredWindowAttributes(h_p, RGB(0,0,0), 255, LWA_COLORKEY);
 }

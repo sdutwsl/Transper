@@ -28,6 +28,7 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnTRBNThumbPosChangingSlider1(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnStnDblclickImg();
 };
 
 extern CTransperApp theApp;

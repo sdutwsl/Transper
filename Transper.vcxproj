@@ -207,6 +207,7 @@
     <None Include="res\Transper.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="cursor.bmp" />
     <Image Include="res\Transper.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
